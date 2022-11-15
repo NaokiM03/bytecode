@@ -99,6 +99,62 @@ impl<'a> ByteCode<'a> {
 }
 
 #[test]
+fn new() {
+    let v = vec![0, 1, 2, 3, 4, 5, 6, 7];
+    let bytes = ByteCode::new(&v);
+    assert_eq!(bytes.inner, v);
+    assert_eq!(bytes.pos, 0);
+}
+
+#[test]
+fn as_slice() {
+    let v = vec![0, 1, 2, 3, 4, 5, 6, 7];
+    let bytes = ByteCode::new(&v);
+    assert_eq!(bytes.as_slice(), v);
+}
+
+#[test]
+fn add_assign() {
+    let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+
+    bytes += 1;
+    assert_eq!(bytes.inner, [1, 2, 3, 4, 5, 6, 7]);
+    assert_eq!(bytes.pos, 1);
+
+    bytes += 3;
+    assert_eq!(bytes.inner, [4, 5, 6, 7]);
+    assert_eq!(bytes.pos, 4);
+}
+
+#[test]
+fn sub_assign() {
+    let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+
+    bytes += 8;
+    assert_eq!(bytes.inner, []);
+    assert_eq!(bytes.pos, 8);
+
+    bytes -= 1;
+    assert_eq!(bytes.inner, [7]);
+    assert_eq!(bytes.pos, 7);
+
+    bytes -= 3;
+    assert_eq!(bytes.inner, [4, 5, 6, 7]);
+    assert_eq!(bytes.pos, 4);
+}
+
+#[test]
+fn index() {
+    let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+
+    assert_eq!(bytes[4], 4);
+    assert_eq!(bytes[2..], [2, 3, 4, 5, 6, 7]);
+    assert_eq!(bytes[..6], [0, 1, 2, 3, 4, 5]);
+    assert_eq!(bytes[2..6], [2, 3, 4, 5]);
+    assert_eq!(bytes[2..=6], [2, 3, 4, 5, 6]);
+}
+
+#[test]
 fn peek() {
     let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     assert_eq!(bytes.peek(3), [0, 1, 2]);
