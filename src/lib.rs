@@ -77,6 +77,10 @@ impl<'a> ByteCode<'a> {
         *self += 1;
     }
 
+    pub fn prev(&mut self) {
+        *self -= 1;
+    }
+
     pub fn skip(&mut self, num: usize) {
         *self += num;
     }
@@ -175,6 +179,15 @@ fn next() {
     assert_eq!(bytes.peek(3), [0, 1, 2]);
     bytes.next();
     assert_eq!(bytes.peek(3), [1, 2, 3]);
+}
+
+#[test]
+fn prev() {
+    let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+    bytes.skip(4);
+    assert_eq!(bytes.peek(3), [4, 5, 6]);
+    bytes.prev();
+    assert_eq!(bytes.peek(3), [3, 4, 5]);
 }
 
 #[test]
