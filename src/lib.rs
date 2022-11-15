@@ -123,13 +123,13 @@ fn take() {
 #[test]
 fn take_into_u16() {
     let mut bytes: ByteCode = vec![0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00].into();
-    assert_eq!(bytes.take_into_u16(), 65535);
+    assert_eq!(bytes.take_into_u16(), u16::MAX);
     assert_eq!(bytes.peek(3), [0, 0, 0]);
 }
 
 #[test]
 fn take_into_u32() {
     let mut bytes: ByteCode = vec![0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00].into();
-    assert_eq!(bytes.take_into_u32(), 4294967295);
+    assert_eq!(bytes.take_into_u32(), u32::MAX);
     assert_eq!(bytes.peek(3), [0, 0, 0]);
 }
