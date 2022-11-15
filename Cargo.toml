@@ -2,8 +2,11 @@
 name = "bytecode-rs"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["NaokiM03"]
+description = "This library provides the ability to read bytecode."
+repository = "https://github.com/NaokiM03/bytecode-rs"
+readme = "README.md"
+license = "MIT"
 
 [dependencies]
 tiny-ansi = "0.1.0"
