@@ -1,23 +1,72 @@
-use std::fmt::Debug;
+use std::{
+    fmt::Debug,
+    ops::{AddAssign, Index, SubAssign},
+    slice::SliceIndex,
+};
 
 #[derive(Debug)]
-pub struct ByteCode {
-    bytes: Vec<u8>,
+pub struct ByteCode<'a> {
+    inner: &'a [u8],
     pos: usize,
 }
 
-impl From<Vec<u8>> for ByteCode {
-    fn from(v: Vec<u8>) -> Self {
+impl<'a> ByteCode<'a> {
+    pub fn new(slice: &'a [u8]) -> Self {
         ByteCode {
-            bytes: v.to_vec(),
+            inner: slice,
             pos: 0,
         }
     }
+
+    pub fn as_slice(&self) -> &'a [u8] {
+        self.inner
+    }
 }
 
-impl ByteCode {
-    pub fn peek(&self, num: usize) -> Vec<u8> {
-        self.bytes[self.pos..][0..num].to_owned()
+impl<'a> AddAssign<usize> for ByteCode<'a> {
+    fn add_assign(&mut self, rhs: usize) {
+        if rhs > self.inner.len() {
+            panic!(
+                "index out of bounds: the slice can only move forward {}, but tried to move {}",
+                self.inner.len(),
+                rhs
+            );
+        }
+        self.inner = unsafe {
+            let ptr = self.inner.as_ptr().add(rhs);
+            std::slice::from_raw_parts(ptr, self.inner.len() - rhs)
+        };
+        self.pos += rhs;
+    }
+}
+
+impl<'a> SubAssign<usize> for ByteCode<'a> {
+    fn sub_assign(&mut self, rhs: usize) {
+        if rhs > self.pos {
+            panic!(
+                "index out of bounds: the slice can only move back {}, but tried to move {}",
+                self.pos, rhs
+            );
+        }
+
+        self.inner = unsafe {
+            let ptr = self.inner.as_ptr().sub(rhs);
+            std::slice::from_raw_parts(ptr, self.inner.len() + rhs)
+        };
+        self.pos -= rhs;
+    }
+}
+
+impl<'a, I: SliceIndex<[u8]>> Index<I> for ByteCode<'a> {
+    type Output = I::Output;
+    fn index(&self, i: I) -> &Self::Output {
+        Index::index(self.inner, i)
+    }
+}
+
+impl<'a> ByteCode<'a> {
+    pub fn peek(&'a self, num: usize) -> &'a [u8] {
+        &self[0..num]
     }
 
     pub fn start_with(&self, v: &[u8]) -> bool {
@@ -25,15 +74,15 @@ impl ByteCode {
     }
 
     pub fn next(&mut self) {
-        self.pos += 1;
+        *self += 1;
     }
 
     pub fn skip(&mut self, num: usize) {
-        self.pos += num;
+        *self += num;
     }
 
     pub fn take(&mut self, num: usize) -> Vec<u8> {
-        let result = self.peek(num);
+        let result = self.peek(num).to_owned();
         self.skip(num);
         result
     }
@@ -51,22 +100,22 @@ impl ByteCode {
 
 #[test]
 fn peek() {
-    let bytes: ByteCode = vec![0, 1, 2, 3, 4, 5, 6, 7].into();
+    let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     assert_eq!(bytes.peek(3), [0, 1, 2]);
 }
 
 #[test]
 fn start_with() {
-    let bytes: ByteCode = vec![0, 1, 2, 3, 4, 5, 6, 7].into();
+    let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     assert!(bytes.start_with(&[0, 1, 2]));
 
-    let bytes: ByteCode = vec![0x66, 0x6f, 0x6f, 0x00, 0x00, 0x00, 0x00, 0x00].into();
+    let bytes = ByteCode::new(&[0x66, 0x6f, 0x6f, 0x00, 0x00, 0x00, 0x00, 0x00]);
     assert!(bytes.start_with("foo".as_bytes()));
 }
 
 #[test]
 fn next() {
-    let mut bytes: ByteCode = vec![0, 1, 2, 3, 4, 5, 6, 7].into();
+    let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     assert_eq!(bytes.peek(3), [0, 1, 2]);
     bytes.next();
     assert_eq!(bytes.peek(3), [1, 2, 3]);
@@ -74,7 +123,7 @@ fn next() {
 
 #[test]
 fn skip() {
-    let mut bytes: ByteCode = vec![0, 1, 2, 3, 4, 5, 6, 7].into();
+    let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     assert_eq!(bytes.peek(3), [0, 1, 2]);
     bytes.skip(3);
     assert_eq!(bytes.peek(3), [3, 4, 5]);
@@ -82,21 +131,21 @@ fn skip() {
 
 #[test]
 fn take() {
-    let mut bytes: ByteCode = vec![0, 1, 2, 3, 4, 5, 6, 7].into();
+    let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     assert_eq!(bytes.take(3), [0, 1, 2]);
     assert_eq!(bytes.peek(3), [3, 4, 5]);
 }
 
 #[test]
 fn take_into_u16() {
-    let mut bytes: ByteCode = vec![0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00].into();
+    let mut bytes = ByteCode::new(&[0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
     assert_eq!(bytes.take_into_u16(), u16::MAX);
     assert_eq!(bytes.peek(3), [0, 0, 0]);
 }
 
 #[test]
 fn take_into_u32() {
-    let mut bytes: ByteCode = vec![0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00].into();
+    let mut bytes = ByteCode::new(&[0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00]);
     assert_eq!(bytes.take_into_u32(), u32::MAX);
     assert_eq!(bytes.peek(3), [0, 0, 0]);
 }
