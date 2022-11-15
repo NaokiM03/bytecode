@@ -1,7 +1,42 @@
-#[derive(Debug)]
+use std::fmt::Debug;
+
+use tiny_ansi::TinyAnsi;
+
 pub struct ByteCode {
     bytes: Vec<u8>,
     pos: usize,
+}
+
+impl Debug for ByteCode {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let mut result = String::new();
+        let header = "         00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F".cyan();
+        result.push_str(&header);
+        result.push('\n');
+
+        let mut bytes: Vec<String> = self
+            .bytes
+            .iter()
+            .map(|byte| format!("{:02X}", byte))
+            .collect();
+        if let Some(byte) = bytes.get_mut(self.pos) {
+            *byte = byte.green();
+        }
+        let lines = bytes.chunks(16).map(|line| line.join(" "));
+        for (i, line) in lines.enumerate() {
+            let line_number = {
+                let mut line_number = "0".repeat(8);
+                let hex = format!("{:02X}", i);
+                line_number.replace_range((8 - hex.len() - 1)..7, &hex);
+                line_number
+            };
+            result.push_str(&line_number);
+            result.push(' ');
+            result.push_str(&line);
+            result.push('\n');
+        }
+        write!(f, "\n{}", result)
+    }
 }
 
 impl From<Vec<u8>> for ByteCode {
