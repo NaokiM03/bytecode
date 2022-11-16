@@ -1,4 +1,4 @@
-//! This library manipulates bytecode.
+//! This library provides the ability to read bytecode.
 //!
 //! # Usage
 //!
