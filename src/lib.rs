@@ -118,17 +118,17 @@ impl<'a> ByteCode<'a> {
     }
 
     /// Returns `true` if all elements have been consumed.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use bytecode_rs::ByteCode;
     ///
     /// let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
-    /// 
+    ///
     /// bytes += 8;
     /// assert!(bytes.is_end());
-    /// 
+    ///
     /// bytes -= 6;
     /// assert!(!bytes.is_end());
     /// ```
