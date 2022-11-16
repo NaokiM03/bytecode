@@ -8,7 +8,7 @@ fn main() {
     let mut buffer = Vec::new();
     f.read_to_end(&mut buffer).unwrap();
 
-    let mut mrb: ByteCode = buffer.into();
+    let mut mrb = ByteCode::new(&buffer);
 
     let _header = mrb.take(20);
     dbg!(&mrb);
