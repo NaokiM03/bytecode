@@ -1,4 +1,4 @@
-# bytecode-rs
+# bytecode
 
 This library provides the ability to read bytecode.
 Note that the emphasis is not on performance.
@@ -7,18 +7,18 @@ Note that the emphasis is not on performance.
 
 Add this to your `Cargo.toml`:
 ```toml
-bytecode-rs = { git = "https://github.com/NaokiM03/bytecode-rs", rev = "a095542" }
+bytecode = { git = "https://github.com/NaokiM03/bytecode", rev = "a095542" }
 ```
 
 and this to your source code:
 ```rust
-use bytecode_rs::ByteCode;
+use bytecode::ByteCode;
 ```
 
 ## Example
 
 ```rust
-use bytecode_rs::ByteCode;
+use bytecode::ByteCode;
 
 fn main() {
     let mut bytes: ByteCode = vec![
@@ -44,7 +44,7 @@ fn main() {
 use std::fs::File;
 use std::io::Read;
 
-use bytecode_rs::ByteCode;
+use bytecode::ByteCode;
 
 fn main() {
     let mut f = File::open("./examples/puts.mrb").unwrap();
@@ -62,4 +62,4 @@ fn main() {
 
 ## License
 
-`bytecode-rs` is released under the MIT License.
+`bytecode` is released under the MIT License.

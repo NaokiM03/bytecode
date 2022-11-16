@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::Read;
 
-use bytecode_rs::ByteCode;
+use bytecode::ByteCode;
 
 fn main() {
     let mut f = File::open("./examples/puts.mrb").unwrap();

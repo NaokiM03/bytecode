@@ -56,7 +56,7 @@ impl<'a> ByteCode<'a> {
     /// # Examples
     ///
     /// ```
-    /// use bytecode_rs::ByteCode;
+    /// use bytecode::ByteCode;
     ///
     /// let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     /// ```
@@ -74,7 +74,7 @@ impl<'a> ByteCode<'a> {
     /// # Examples
     ///
     /// ```
-    /// use bytecode_rs::ByteCode;
+    /// use bytecode::ByteCode;
     ///
     /// let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     /// let slice = bytes.as_slice();
@@ -90,7 +90,7 @@ impl<'a> ByteCode<'a> {
     /// # Examples
     ///
     /// ```
-    /// use bytecode_rs::ByteCode;
+    /// use bytecode::ByteCode;
     ///
     /// let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     /// assert_eq!(bytes.len(), 8);
@@ -104,7 +104,7 @@ impl<'a> ByteCode<'a> {
     /// # Examples
     ///
     /// ```
-    /// use bytecode_rs::ByteCode;
+    /// use bytecode::ByteCode;
     ///
     /// let v = vec![0, 1, 2, 3, 4, 5, 6, 7];
     /// let mut bytes = ByteCode::new(&v);
@@ -122,7 +122,7 @@ impl<'a> ByteCode<'a> {
     /// # Examples
     ///
     /// ```
-    /// use bytecode_rs::ByteCode;
+    /// use bytecode::ByteCode;
     ///
     /// let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     ///
@@ -186,7 +186,7 @@ impl<'a> ByteCode<'a> {
     /// # Examples
     ///
     /// ```
-    /// use bytecode_rs::ByteCode;
+    /// use bytecode::ByteCode;
     ///
     /// let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     /// assert_eq!(bytes.peek(3), [0, 1, 2]);
@@ -207,7 +207,7 @@ impl<'a> ByteCode<'a> {
     /// # Examples
     ///
     /// ```
-    /// use bytecode_rs::ByteCode;
+    /// use bytecode::ByteCode;
     ///
     /// let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     /// assert!(bytes.starts_with(&[0, 1, 2]));
@@ -224,7 +224,7 @@ impl<'a> ByteCode<'a> {
     /// # Examples
     ///
     /// ```
-    /// use bytecode_rs::ByteCode;
+    /// use bytecode::ByteCode;
     ///
     /// let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     /// bytes += 3;
@@ -241,7 +241,7 @@ impl<'a> ByteCode<'a> {
     /// # Examples
     ///
     /// ```
-    /// use bytecode_rs::ByteCode;
+    /// use bytecode::ByteCode;
     ///
     /// let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     /// bytes += 5;
@@ -258,7 +258,7 @@ impl<'a> ByteCode<'a> {
     /// # Examples
     ///
     /// ```
-    /// use bytecode_rs::ByteCode;
+    /// use bytecode::ByteCode;
     ///
     /// let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     /// bytes.skip(3);
@@ -273,7 +273,7 @@ impl<'a> ByteCode<'a> {
     /// # Examples
     ///
     /// ```
-    /// use bytecode_rs::ByteCode;
+    /// use bytecode::ByteCode;
     ///
     /// let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     /// assert_eq!(bytes.take(3), [0, 1, 2]);
@@ -290,7 +290,7 @@ impl<'a> ByteCode<'a> {
     /// # Examples
     ///
     /// ```
-    /// use bytecode_rs::ByteCode;
+    /// use bytecode::ByteCode;
     ///
     /// let mut bytes = ByteCode::new(&[0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
     /// assert_eq!(bytes.take_into_u16(), u16::MAX);
@@ -306,7 +306,7 @@ impl<'a> ByteCode<'a> {
     /// # Examples
     ///
     /// ```
-    /// use bytecode_rs::ByteCode;
+    /// use bytecode::ByteCode;
     ///
     /// let mut bytes = ByteCode::new(&[0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00]);
     /// assert_eq!(bytes.take_into_u32(), u32::MAX);

@@ -1,10 +1,10 @@
 [package]
-name = "bytecode-rs"
+name = "bytecode"
 version = "0.1.0"
 edition = "2021"
 authors = ["NaokiM03"]
 description = "This library provides the ability to read bytecode."
-repository = "https://github.com/NaokiM03/bytecode-rs"
+repository = "https://github.com/NaokiM03/bytecode"
 readme = "README.md"
 license = "MIT"
 
