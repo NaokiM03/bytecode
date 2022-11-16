@@ -1,6 +1,6 @@
 use std::{
     fmt::Debug,
-    ops::{AddAssign, Index, SubAssign, Deref, DerefMut},
+    ops::{AddAssign, Index, SubAssign},
     slice::SliceIndex,
 };
 
@@ -65,19 +65,6 @@ impl<'a, I: SliceIndex<[u8]>> Index<I> for ByteCode<'a> {
     type Output = I::Output;
     fn index(&self, i: I) -> &Self::Output {
         Index::index(self.inner, i)
-    }
-}
-
-impl<'a> Deref for ByteCode<'a> {
-    type Target = &'a [u8];
-    fn deref(&self) -> &Self::Target {
-        &self.inner
-    }
-}
-
-impl<'a> DerefMut for ByteCode<'a> {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.inner
     }
 }
 
