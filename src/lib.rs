@@ -51,6 +51,15 @@ impl Debug for ByteCode<'_> {
 }
 
 impl<'a> ByteCode<'a> {
+    /// Creates a new `ByteCode`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use bytecode_rs::ByteCode;
+    ///
+    /// let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+    /// ```
     pub fn new(slice: &'a [u8]) -> Self {
         ByteCode {
             inner: slice,
@@ -58,18 +67,71 @@ impl<'a> ByteCode<'a> {
         }
     }
 
+    /// Extracts a current remaining slice.
+    ///
+    /// Equivalent to `&bytes[..]`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use bytecode_rs::ByteCode;
+    ///
+    /// let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+    /// let slice = bytes.as_slice();
+    /// ```
     pub fn as_slice(&self) -> &'a [u8] {
         self.inner
     }
 
+    /// Returns the number of elements.
+    ///
+    /// Note that consumed elements are also counted.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use bytecode_rs::ByteCode;
+    ///
+    /// let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+    /// assert_eq!(bytes.len(), 8);
+    /// ```
     pub fn len(&self) -> usize {
         self.inner.len() + self.pos
     }
 
+    /// Resets the pointer to original state.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use bytecode_rs::ByteCode;
+    ///
+    /// let v = vec![0, 1, 2, 3, 4, 5, 6, 7];
+    /// let mut bytes = ByteCode::new(&v);
+    /// bytes += 5;
+    /// assert_eq!(bytes.as_slice(), [5, 6, 7]);
+    /// bytes.reset();
+    /// assert_eq!(bytes.as_slice(), v);
+    /// ```
     pub fn reset(&mut self) {
         *self -= self.pos;
     }
 
+    /// Returns `true` if all elements have been consumed.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// use bytecode_rs::ByteCode;
+    ///
+    /// let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+    /// 
+    /// bytes += 8;
+    /// assert!(bytes.is_end());
+    /// 
+    /// bytes -= 6;
+    /// assert!(!bytes.is_end());
+    /// ```
     pub fn is_end(&self) -> bool {
         self.pos == self.len()
     }
