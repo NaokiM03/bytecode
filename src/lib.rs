@@ -80,7 +80,7 @@ impl<'a> ByteCode<'a> {
         &self[0..num]
     }
 
-    pub fn start_with(&self, v: &[u8]) -> bool {
+    pub fn starts_with(&self, v: &[u8]) -> bool {
         self.peek(v.len()) == v
     }
 
@@ -191,12 +191,12 @@ fn peek_out_of_range() {
 }
 
 #[test]
-fn start_with() {
+fn starts_with() {
     let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
-    assert!(bytes.start_with(&[0, 1, 2]));
+    assert!(bytes.starts_with(&[0, 1, 2]));
 
     let bytes = ByteCode::new(&[0x66, 0x6f, 0x6f, 0x00, 0x00, 0x00, 0x00, 0x00]);
-    assert!(bytes.start_with("foo".as_bytes()));
+    assert!(bytes.starts_with("foo".as_bytes()));
 }
 
 #[test]
