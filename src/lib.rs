@@ -25,6 +25,7 @@ impl Debug for ByteCode<'_> {
         };
         replica.reset();
 
+        // If the amount of data is large, it may be better to use a lookup table.
         let mut content: Vec<String> = replica
             .inner
             .iter()
