@@ -75,7 +75,7 @@ fn main() {
 }
 ```
 
-![examples/debug.png](examples/debug.png)
+![examples/debug.png](https://raw.githubusercontent.com/NaokiM03/bytecode-rs/ac37898d77e449aeea62ea1e07211278ecede600/examples/debug.png)
 
 ## License
 
