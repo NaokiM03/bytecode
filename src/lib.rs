@@ -138,6 +138,7 @@ impl<'a> ByteCode<'a> {
 }
 
 impl<'a> AddAssign<usize> for ByteCode<'a> {
+    /// Move the pointer to the next.
     fn add_assign(&mut self, rhs: usize) {
         if rhs > self.inner.len() {
             panic!(
@@ -155,6 +156,7 @@ impl<'a> AddAssign<usize> for ByteCode<'a> {
 }
 
 impl<'a> SubAssign<usize> for ByteCode<'a> {
+    /// Move the pointer to the prev.
     fn sub_assign(&mut self, rhs: usize) {
         if rhs > self.pos {
             panic!(
