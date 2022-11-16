@@ -21,6 +21,10 @@ impl<'a> ByteCode<'a> {
     pub fn as_slice(&self) -> &'a [u8] {
         self.inner
     }
+
+    pub fn len(&self) -> usize {
+        self.inner.len() + self.pos
+    }
 }
 
 impl<'a> AddAssign<usize> for ByteCode<'a> {
@@ -115,6 +119,14 @@ fn as_slice() {
     let v = vec![0, 1, 2, 3, 4, 5, 6, 7];
     let bytes = ByteCode::new(&v);
     assert_eq!(bytes.as_slice(), v);
+}
+
+#[test]
+fn len() {
+    let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+    bytes.skip(3);
+    assert_eq!(bytes.inner.len(), 5); // `inner` is not public
+    assert_eq!(bytes.len(), 8);
 }
 
 #[test]
