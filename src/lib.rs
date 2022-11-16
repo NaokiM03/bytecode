@@ -18,25 +18,22 @@ impl Debug for ByteCode<'_> {
         result.push_str(&header);
         result.push('\n');
 
-        let mut slice: Vec<String> = unsafe {
-            let ptr = self.inner.as_ptr().sub(self.pos);
-            let slice = std::slice::from_raw_parts(ptr, self.pos);
-            slice.iter().map(|byte| format!("{:02X}", byte)).collect()
+        let current_pos = self.pos;
+        let mut replica = ByteCode {
+            inner: self.inner,
+            pos: self.pos,
         };
-        let mut rest: Vec<String> = self
+        replica.reset();
+
+        let mut content: Vec<String> = replica
             .inner
             .iter()
             .map(|byte| format!("{:02X}", byte))
             .collect();
-
-        if let Some(byte) = rest.first_mut() {
+        if let Some(byte) = content.get_mut(current_pos) {
             *byte = byte.green();
         }
-
-        slice.append(&mut rest);
-
-        let lines = slice.chunks(16).map(|line| line.join(" "));
-        for (i, line) in lines.enumerate() {
+        for (i, line) in content.chunks(16).map(|line| line.join(" ")).enumerate() {
             let line_number = {
                 let mut line_number = "0".repeat(8);
                 let hex = format!("{:02X}", i);
@@ -301,4 +298,12 @@ fn take_into_u32() {
     let mut bytes = ByteCode::new(&[0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00]);
     assert_eq!(bytes.take_into_u32(), u32::MAX);
     assert_eq!(bytes.peek(3), [0, 0, 0]);
+}
+
+#[test]
+fn sandbox() {
+    let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+    bytes.skip(2);
+    dbg!(&bytes.len());
+    dbg!(&bytes);
 }
