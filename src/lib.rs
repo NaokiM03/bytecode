@@ -311,11 +311,3 @@ fn take_into_u32() {
     assert_eq!(bytes.take_into_u32(), u32::MAX);
     assert_eq!(bytes.peek(3), [0, 0, 0]);
 }
-
-#[test]
-fn sandbox() {
-    let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
-    bytes.skip(2);
-    dbg!(&bytes.len());
-    dbg!(&bytes);
-}
