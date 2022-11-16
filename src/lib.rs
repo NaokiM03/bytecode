@@ -68,6 +68,10 @@ impl<'a> ByteCode<'a> {
     pub fn reset(&mut self) {
         *self -= self.pos;
     }
+
+    pub fn is_end(&self) -> bool {
+        self.pos == self.len()
+    }
 }
 
 impl<'a> AddAssign<usize> for ByteCode<'a> {
@@ -189,6 +193,13 @@ fn reset() {
     bytes.reset();
     assert_eq!(bytes.inner, v);
     assert_eq!(bytes.pos, 0);
+}
+
+#[test]
+fn is_end() {
+    let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+    bytes.skip(8);
+    assert!(bytes.is_end());
 }
 
 #[test]
