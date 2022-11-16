@@ -70,6 +70,13 @@ impl<'a, I: SliceIndex<[u8]>> Index<I> for ByteCode<'a> {
 
 impl<'a> ByteCode<'a> {
     pub fn peek(&'a self, num: usize) -> &'a [u8] {
+        if num > self.inner.len() {
+            panic!(
+                "range end index {} out of range for slice of length {}",
+                num,
+                self.inner.len()
+            );
+        }
         &self[0..num]
     }
 
@@ -174,6 +181,13 @@ fn index() {
 fn peek() {
     let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     assert_eq!(bytes.peek(3), [0, 1, 2]);
+}
+
+#[test]
+#[should_panic]
+fn peek_out_of_range() {
+    let bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+    bytes.peek(9);
 }
 
 #[test]
