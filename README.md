@@ -1,13 +1,12 @@
 # bytecode
 
 This library provides the ability to read bytecode.
-Note that the emphasis is not on performance.
 
 ## Usage
 
 Add this to your `Cargo.toml`:
 ```toml
-bytecode = { git = "https://github.com/NaokiM03/bytecode", rev = "a095542" }
+bytecode = "0.1.0"
 ```
 
 and this to your source code:
@@ -21,22 +20,40 @@ use bytecode::ByteCode;
 use bytecode::ByteCode;
 
 fn main() {
-    let mut bytes: ByteCode = vec![
-        0x66, 0x6f, 0x6f, 0x62, 0x61, 0x72, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-    ]
-    .into();
+    {
+        let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
 
-    assert_eq!(bytes.peek(3), [0x66, 0x6f, 0x6f]);
-    assert!(bytes.start_with("foo".as_bytes()));
+        bytes += 3;
 
-    bytes.next();
-    assert!(bytes.start_with("oo".as_bytes()));
-    bytes.skip(2);
+        let _first = bytes[0];
+        let _second = bytes[1];
 
-    assert_eq!(bytes.take(3), "bar".as_bytes());
+        let _subslice = &bytes[2..5];
+    }
 
-    assert_eq!(bytes.take_into_u16(), u16::MAX);
-    assert_eq!(bytes.take_into_u32(), u32::MAX);
+    {
+        let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+
+        match bytes.peek(3) {
+            // omitted
+            _ => {}
+        }
+
+        if bytes.starts_with("foo".as_bytes()) {
+            // omitted
+        }
+
+        bytes.skip(2);
+
+        let _subslice = bytes.take(4);
+    }
+
+    {
+        let mut bytes = ByteCode::new(&[0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00]);
+
+        let _u16 = bytes.take_into_u16(); // u16::MAX
+        let _u32 = bytes.take_into_u32(); // u32::MAX
+    }
 }
 ```
 
