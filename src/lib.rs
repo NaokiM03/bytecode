@@ -25,6 +25,10 @@ impl<'a> ByteCode<'a> {
     pub fn len(&self) -> usize {
         self.inner.len() + self.pos
     }
+
+    pub fn reset(&mut self) {
+        *self -= self.pos;
+    }
 }
 
 impl<'a> AddAssign<usize> for ByteCode<'a> {
@@ -134,6 +138,18 @@ fn len() {
     bytes.skip(3);
     assert_eq!(bytes.inner.len(), 5); // `inner` is not public
     assert_eq!(bytes.len(), 8);
+}
+
+#[test]
+fn reset() {
+    let v = vec![0, 1, 2, 3, 4, 5, 6, 7];
+    let mut bytes = ByteCode::new(&v);
+    bytes.skip(5);
+    assert_eq!(bytes.inner, [5, 6, 7]);
+    assert_eq!(bytes.pos, 5);
+    bytes.reset();
+    assert_eq!(bytes.inner, v);
+    assert_eq!(bytes.pos, 0);
 }
 
 #[test]
