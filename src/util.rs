@@ -135,6 +135,22 @@ impl<'a> ByteCode<'a> {
         let bytes: [u8; 4] = self.take(4).try_into().unwrap();
         u32::from_be_bytes(bytes)
     }
+
+    /// Returns the string consisting of the given number of bytes from the beginning of the slice.
+    /// Moves the pointer forward by given number.
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// use bytecode::ByteCode;
+    /// 
+    /// let mut bytes = ByteCode::new(&[0x66, 0x6f, 0x6f, 0x00, 0x00, 0x00, 0x00, 0x00]);
+    /// assert_eq!(bytes.take_into_string(3), "foo".to_owned());
+    /// ```
+    pub fn take_into_string(&mut self, num: usize) -> String {
+        let bytes = self.take(num);
+        String::from_utf8(bytes).unwrap()
+    }
 }
 
 #[test]
@@ -203,4 +219,10 @@ fn take_into_u32() {
     let mut bytes = ByteCode::new(&[0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00]);
     assert_eq!(bytes.take_into_u32(), u32::MAX);
     assert_eq!(bytes.peek(3), [0, 0, 0]);
+}
+
+#[test]
+fn take_into_string() {
+    let mut bytes = ByteCode::new(&[0x66, 0x6f, 0x6f, 0x00, 0x00, 0x00, 0x00, 0x00]);
+    assert_eq!(bytes.take_into_string(3), "foo".to_owned());
 }
