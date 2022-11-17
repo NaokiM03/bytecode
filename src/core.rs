@@ -99,6 +99,21 @@ impl<'a> ByteCode<'a> {
         self.inner.len() + self.pos
     }
 
+    /// Returns the pointer position.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use bytecode::ByteCode;
+    ///
+    /// let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+    /// bytes += 5;
+    /// assert_eq!(bytes.pos(), 5);
+    /// ```
+    pub fn pos(&self) -> usize {
+        self.pos
+    }
+
     /// Resets the pointer to original state.
     ///
     /// # Examples
@@ -201,6 +216,13 @@ fn len() {
     bytes.skip(3);
     assert_eq!(bytes.inner.len(), 5); // `inner` is not public
     assert_eq!(bytes.len(), 8);
+}
+
+#[test]
+fn pos() {
+    let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
+    bytes.skip(5);
+    assert_eq!(bytes.pos(), 5);
 }
 
 #[test]
