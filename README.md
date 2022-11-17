@@ -51,6 +51,7 @@ fn main() {
     {
         let mut bytes = ByteCode::new(&[0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x66, 0x6f, 0x6f]);
 
+        let _u8 = bytes.take_into_u8();   //  u8::MAX
         let _u16 = bytes.take_into_u16(); // u16::MAX
         let _u32 = bytes.take_into_u32(); // u32::MAX
 

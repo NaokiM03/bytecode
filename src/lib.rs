@@ -41,11 +41,12 @@
 //! ```
 //! use bytecode::ByteCode;
 //!
-//! let mut bytes = ByteCode::new(&[0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x66, 0x6f, 0x6f]);
+//! let mut bytes = ByteCode::new(&[0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x66, 0x6f, 0x6f]);
 //!
+//! let _u8 = bytes.take_into_u8();   //  u8::MAX
 //! let _u16 = bytes.take_into_u16(); // u16::MAX
 //! let _u32 = bytes.take_into_u32(); // u32::MAX
-//! 
+//!
 //! let _string = bytes.take_into_string(3); // "foo".to_owned()
 //! ```
 

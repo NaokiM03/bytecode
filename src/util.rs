@@ -104,6 +104,21 @@ impl<'a> ByteCode<'a> {
         result
     }
 
+    /// Returns the first byte.
+    /// Moves the pointer forward 1.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use bytecode::ByteCode;
+    ///
+    /// let mut bytes = ByteCode::new(&[0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
+    /// assert_eq!(bytes.take_into_u8(), u8::MAX);
+    /// ```
+    pub fn take_into_u8(&mut self) -> u8 {
+        self.take(1)[0]
+    }
+
     /// Returns the first 2 elements of the slice converted into `u16`.
     /// Moves the pointer forward 2.
     ///
@@ -138,12 +153,12 @@ impl<'a> ByteCode<'a> {
 
     /// Returns the string consisting of the given number of bytes from the beginning of the slice.
     /// Moves the pointer forward by given number.
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// use bytecode::ByteCode;
-    /// 
+    ///
     /// let mut bytes = ByteCode::new(&[0x66, 0x6f, 0x6f, 0x00, 0x00, 0x00, 0x00, 0x00]);
     /// assert_eq!(bytes.take_into_string(3), "foo".to_owned());
     /// ```
@@ -205,6 +220,13 @@ fn take() {
     let mut bytes = ByteCode::new(&[0, 1, 2, 3, 4, 5, 6, 7]);
     assert_eq!(bytes.take(3), [0, 1, 2]);
     assert_eq!(bytes.peek(3), [3, 4, 5]);
+}
+
+#[test]
+fn take_into_u8() {
+    let mut bytes = ByteCode::new(&[0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
+    assert_eq!(bytes.take_into_u8(), u8::MAX);
+    assert_eq!(bytes.peek(3), [0, 0, 0]);
 }
 
 #[test]
